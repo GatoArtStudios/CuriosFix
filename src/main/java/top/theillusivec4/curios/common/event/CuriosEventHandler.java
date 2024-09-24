@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import net.minecraft.core.NonNullList;
@@ -74,6 +77,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.PacketDistributor;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.InventoryCurios;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioChangeEvent;
 import top.theillusivec4.curios.api.event.CurioDropsEvent;
@@ -102,6 +106,7 @@ import top.theillusivec4.curios.common.util.EquipCurioTrigger;
 public class CuriosEventHandler {
 
   public static boolean dirtyTags = false;
+  private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   private static void handleDrops(String identifier, LivingEntity livingEntity,
                                   List<Tuple<Predicate<ItemStack>, DropRule>> dropRules,
@@ -187,6 +192,9 @@ public class CuriosEventHandler {
       NetworkHandler.INSTANCE
           .send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) playerEntity),
               new SPacketSetIcons(icons));
+    }
+    if (playerEntity instanceof ServerPlayer player) {
+      scheduler.schedule(() -> new InventoryCurios(player), 5, TimeUnit.SECONDS);
     }
   }
 

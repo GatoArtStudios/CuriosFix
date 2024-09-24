@@ -80,6 +80,7 @@ import top.theillusivec4.curios.common.util.SetCurioAttributesFunction;
 import top.theillusivec4.curios.server.SlotHelper;
 import top.theillusivec4.curios.server.command.CurioArgumentType;
 import top.theillusivec4.curios.server.command.CuriosCommand;
+import top.theillusivec4.curios.server.command.CuriosFixCommand;
 import top.theillusivec4.curios.server.command.CuriosSelectorOptions;
 
 @Mod(Curios.MODID)
@@ -138,6 +139,7 @@ public class Curios {
 
   private void registerCommands(RegisterCommandsEvent evt) {
     CuriosCommand.register(evt.getDispatcher(), evt.getBuildContext());
+    CuriosFixCommand.register(evt.getDispatcher(), evt.getBuildContext());
   }
 
   private void reload(final AddReloadListenerEvent evt) {
